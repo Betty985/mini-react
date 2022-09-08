@@ -12,21 +12,36 @@ function createDom(fiber) {
   return dom;
 }
 export function render(element, container) {
-  // nextUnitOfWork设置为fiber的根
-  nextUnitOfWork = {
+  // wipRoot设置为fiber的根
+  wipRoot = {
     dom: container,
     props: {
       children: [element],
     },
   };
+  nextUnitOfWork=wipRoot
+}
+function commitRoot(){
+  commitWork(wipRoot.child)
+  wipRoot=null
+}
+function commitWork(fiber){
+  if(!fiber) return
+  const domParent=fiber.parent.dom
+  domParent.appendchild(fiber.dom)
+  commitWork(fiber.child)
+  commitWork(fiber.sibling)
 }
 // 孩子>兄弟>叔叔，到达根节点意味着完成所有渲染工作
-let nextUnitOfWork = null;
+let wipRoot = null,nextUnitOfWork=null;
 function workLoop(deadline) {
   let shouldYield = false;
   while (nextUnitOfWork && !shouldYield) {
     nextUnitOfWork = performUnitOfWork(nextUnitOfWork);
     shouldYield = deadline.timeRemaining() < 1;
+  }
+  if(!nextUnitOfWork&&wipRoot){
+    commitRoot()
   }
   requestIdleCallback(workLoop);
 }
@@ -36,9 +51,6 @@ function performUnitOfWork(fiber) {
   //  add dom node
   if (!fiber.dom) {
     fiber.dom = createDom(fiber);
-  }
-  if (fiber.parent) {
-    fiber.parent.dom.appendChild(fiber.dom);
   }
   // create new fiber
   const elements = fiber.props.children;
@@ -52,6 +64,7 @@ function performUnitOfWork(fiber) {
       parent: fiber,
       dom: null,
     };
+   // return the unit of work
     if(index===0){
       fiber.child=newFiber
     }else{
@@ -69,5 +82,4 @@ function performUnitOfWork(fiber) {
       nextFiber=nextFiber.parent
     }
   }
-  // return the unit of work
 }
