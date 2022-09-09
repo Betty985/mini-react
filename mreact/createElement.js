@@ -19,17 +19,3 @@ function createTextElement(text) {
     },
   };
 }
-
-// const element = minireact.createElement(
-//   "div",
-//   { id: "foo" },
-//   minireact.createElement("a", null, "bar"),
-//   minireact.createElement("b")
-// );
-// /** @jsx minireact.createElement */
-// const element=(
-//     <div id='foo'>
-//         <a>bar</a>
-//         <b />
-//     </div>
-// )

@@ -176,7 +176,7 @@ function reconcileChildren(wipFiber, elements) {
     }
 
     if (index === 0) {
-      fiber.child = newFiber;
+      wipFiber.child = newFiber;
     } else {
       prevSibling.sibling = newFiber;
       index++;
