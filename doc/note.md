@@ -2,4 +2,7 @@
 
 渲染和提交：浏览器可能在渲染完整个树之前中断渲染，所以跟踪fiber树的根，完成所有工作后，将整个fiber树提交给dom。
 
-函数组件的fiber没有DOM节点，并且children来自运行函数而不是直接从props中获取
+函数组件的fiber没有DOM节点，并且children来自运行函数而不是直接从props中获取.
+
+`/** @jsx  minireact.createElement*/`的作用：
+[@babel/plugin-transform-react-jsx](https://babeljs.io/docs/en/babel-plugin-transform-react-jsx)
