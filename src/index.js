@@ -1,5 +1,5 @@
 import minireact from "mreact";
-/** @jsx  minireact.createElement*/
+// /** @jsx  minireact.createElement*/
 const element = (
   <div>
     <h1 style="background:salmon"> hello world</h1>
