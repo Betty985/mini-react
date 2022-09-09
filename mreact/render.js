@@ -123,7 +123,11 @@ function performUnitOfWork(fiber) {
     nextFiber = nextFiber.parent;
   }
 }
+let wipFiber=null,hookIndex=null
 function updateFunctionComponent(fiber){
+  wipFiber=fiber
+  hookIndex=0
+  wipFiber.hooks=[]
   const children=[fiber.type(fiber.props)]
   reconcileChildren(fiber,children)
 }
@@ -178,4 +182,28 @@ function reconcileChildren(wipFiber, elements) {
       index++;
     }
   }
+}
+export function useState(initial){
+  const oldHook=wipFiber.alternate?.hooks[hookIndex]
+  const hook={
+    state:oldHook?oldHook.state:initial,
+    queue:[]
+  }
+  const actions=oldHook?oldHook.queue:[]
+  actions.forEach(action=>{
+    hook.state=action(hook.state)
+  })
+  const setState=action=>{
+    hook.queue.push(action)
+    wipFiber={
+      dom:currentRoot.dom,
+      props:currentRoot.props,
+      alternate:currentRoot
+    }
+    nextUnitOfWork=wipFiber
+    deletions=[]
+  }
+  wipFiber.hooks.push(hook)
+  hookIndex++
+  return [hook.state,setState]
 }

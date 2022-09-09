@@ -1,10 +1,7 @@
 import { createElement } from "./createElement";
-import { render } from "./render";
-const minireact = {
-  createElement,
-  render,
-};
+import { render,useState } from "./render";
 export default  {
     createElement,
     render,
+    useState
   };
